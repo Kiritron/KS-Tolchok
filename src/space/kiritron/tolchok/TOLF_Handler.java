@@ -1,7 +1,5 @@
 package space.kiritron.tolchok;
 
-import java.io.*;
-
 /**
  * Класс с методами для управления конфигами стандарта КС Толчок, далее TOLF.
  * @author Киритрон Стэйблкор
@@ -14,7 +12,7 @@ public class TOLF_Handler {
      * Генерируется только одна категория и одно поле. Чтобы добавить поле к существующим данным TOLF, используйте метод AddFieldToData.
      * @param category Категория
      * @param firstField Имя поля
-     * @param firstParam Значение поля(параметр)
+     * @param firstParam Значение поля(параметр). Должно быть определено.
      * @return возвращает сгенерированные данные в формате TOLF. В случае неудачи, будет возвращены ошибки DATA_IS_NULL_ERROR или BLOCKED_CHARACTERS_DETECTED.
      */
     public static String GenData(String category, String firstField, String firstParam) {
@@ -23,7 +21,7 @@ public class TOLF_Handler {
                 String Cache
                         = "</" + "\n"
                         + "\t" + "[" + category + "]" + "\n"
-                        + "\t\t" + firstField + ": " + firstParam + ";" + "\n"
+                        + "\t\t- " + firstField + ": " + firstParam + ";" + "\n"
                         + "\t" + "[/" + category + "]" + "\n"
                         + "/>";
 
@@ -37,6 +35,45 @@ public class TOLF_Handler {
     }
 
     /**
+     * Добавление параметра в данные TOLF. (ЭКСПЕРИМЕНТАЛЬНО)
+     * @param data Данные, которые необходимо обработать
+     * @param category Категория, в которой нужно добавить параметр
+     * @param nameField Имя поля
+     * @param Param Значение поля(параметр). Должно быть определено
+     * @return возвращает сгенерированные данные в формате TOLF, где есть новая строка. В случае неудачи - будет возвращена ошибка.
+     */
+    public static String AddFieldToData(String data, String category, String nameField, String Param) {
+        String CatOp, CatCl, CacheOne, CacheTwo, CacheThree;
+
+        if(checkBanSymbols(category)) {
+            if (data.contains("[" + category + "]") == true) {
+                if (data.contains("[/" + category + "]") == true) {
+                    CatOp = "[" + category + "]";
+                    CatCl = "[/" + category + "]";
+                    CacheOne = data.format("\\%s[^)]+\\%s", "</", CatOp);
+                    CacheTwo = data.format("\\%s[^)]+\\%s", CatCl, "/>");
+
+                    CacheOne = CacheOne.substring(9);
+                    CacheTwo = CacheTwo.substring(1, CacheTwo.length() - (CacheTwo.length() - 1 - CatCl.length()));
+
+                    data = data.replaceAll(String.format("\\%s[^)]+\\%s", "</", CatOp), "");
+                    data = data.replaceAll(String.format("\\%s[^)]+\\%s", CatCl, "/>"), "");
+                    CacheThree = data;
+                    data = "\t\t- " + nameField + ": " + Param + ";" + "\n";
+
+                    return "</" + "\n"  + "\t" + CacheOne + CacheThree + data + CacheTwo + "\n"  + "/>";
+                } else {
+                    return "SEARCH_CATEGORY_FAILED";
+                }
+            } else {
+                return "SEARCH_CATEGORY_FAILED";
+            }
+        } else {
+            return "BLOCKED_CHARACTERS_DETECTED";
+        }
+    }
+
+    /**
      * Изменение параметра в данных TOLF.
      * @param data Данные TOLF, которые нужно обработать.
      * @param category Категория, в которой нужно обновить параметр.
@@ -45,10 +82,7 @@ public class TOLF_Handler {
      * @return возвращает обработанные данные, а в случае неудачи - ошибку.
      */
     public static String EditParamInData(String data, String category, String field, String newParam) {
-        String CatOp = null;
-        String CatCl = null;
-        String CacheOne = null;
-        String CacheTwo = null;
+        String CatOp, CatCl, CacheOne, CacheTwo;
 
         int lenghtOfField = field.length();
 
@@ -92,8 +126,7 @@ public class TOLF_Handler {
      */
     public static String ReadParamFromData(String data, String category, String field) {
         String cache = data;
-        String CatOp = null;
-        String CatCl = null;
+        String CatOp, CatCl;
 
         int lenghtOfField = field.length();
 
