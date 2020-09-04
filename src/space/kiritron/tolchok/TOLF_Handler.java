@@ -3,7 +3,7 @@ package space.kiritron.tolchok;
 /**
  * Класс с методами для управления конфигами стандарта КС Толчок, далее TOLF.
  * @author Киритрон Стэйблкор
- * @version 2.0
+ * @version 2.1
  */
 
 public class TOLF_Handler {
@@ -138,11 +138,13 @@ public class TOLF_Handler {
                     cache = cache.replaceAll(String.format("\\%s[^)]+\\%s", "</", CatOp), "");
                     cache = cache.replaceAll(String.format("\\%s[^)]+\\%s", CatCl, "/>"), "");
 
-                    int Field1 = cache.indexOf("- " + field + ": ") + 4 + lenghtOfField;
-                    int Field2 = cache.indexOf(";", Field1);
-                    String ParamOfFIELD = cache.substring(Field1, Field2);
-
-                    return ParamOfFIELD;
+                    if (cache.contains(field)) {
+                        int Field1 = cache.indexOf("- " + field + ": ") + 4 + lenghtOfField;
+                        int Field2 = cache.indexOf(";", Field1);
+                        return cache.substring(Field1, Field2);
+                    } else {
+                        return "FIELD_NOT_FOUND_ERROR";
+                    }
                 } else {
                     return "DATA_FORMAT_ERROR";
                 }
