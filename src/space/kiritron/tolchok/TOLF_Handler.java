@@ -162,8 +162,7 @@ public class TOLF_Handler {
                 + category.indexOf("#") + category.indexOf("№") + category.indexOf("@") + category.indexOf("~") + category.indexOf("*")
                 + category.indexOf("%") + category.indexOf(")") + category.indexOf("(") + category.indexOf("|") + category.indexOf("+")
                 + category.indexOf("=") + category.indexOf("{") + category.indexOf("}");
-
-        if (index < 0) {
+        if (index == -23) {
             return true;
         } else {
             return false;
