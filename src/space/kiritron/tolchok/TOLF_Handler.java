@@ -3,7 +3,7 @@ package space.kiritron.tolchok;
 /**
  * Класс с методами для управления конфигами стандарта КС Толчок, далее TOLF.
  * @author Киритрон Стэйблкор
- * @version 2.1
+ * @version 2.2
  */
 
 public class TOLF_Handler {
@@ -17,7 +17,7 @@ public class TOLF_Handler {
      */
     public static String GenData(String category, String firstField, String firstParam) {
         if (category != null && category != "" && firstField != null && firstField != "" && firstParam != null && firstParam != "") {
-            if (checkBanSymbols(category)) {
+            if (checkBannedSymbols(category)) {
                 String Cache
                         = "</" + "\n"
                         + "\t" + "[" + category + "]" + "\n"
@@ -45,7 +45,7 @@ public class TOLF_Handler {
     public static String AddFieldToData(String data, String category, String nameField, String Param) {
         String CatOp, CatCl, CacheOne, CacheTwo, CacheThree;
 
-        if(checkBanSymbols(category)) {
+        if(checkBannedSymbols(category)) {
             if (data.contains("[" + category + "]") == true) {
                 if (data.contains("[/" + category + "]") == true) {
                     CatOp = "[" + category + "]";
@@ -86,7 +86,7 @@ public class TOLF_Handler {
 
         int lenghtOfField = field.length();
 
-        if(checkBanSymbols(category)) {
+        if(checkBannedSymbols(category)) {
             if (data.contains("[" + category + "]") == true) {
                 if (data.contains("[/" + category + "]") == true) {
                     CatOp = "[" + category + "]";
@@ -130,7 +130,7 @@ public class TOLF_Handler {
 
         int lenghtOfField = field.length();
 
-        if(checkBanSymbols(category)) {
+        if(checkBannedSymbols(category)) {
             if (cache.contains("[" + category + "]") == true) {
                 if (cache.contains("[/" + category + "]") == true) {
                     CatOp = "[" + category + "]";
@@ -156,32 +156,14 @@ public class TOLF_Handler {
         }
     }
 
-    private static boolean checkBanSymbols(String category) {
-        int index1 = category.indexOf(".");
-        int index2 = category.indexOf("?");
-        int index3 = category.indexOf("!");
-        int index4 = category.indexOf('"');
-        int index5 = category.indexOf("'");
-        int index6 = category.indexOf(",");
-        int index7 = category.indexOf("&");
-        int index8 = category.indexOf("$");
-        int index9 = category.indexOf(";");
-        int index10 = category.indexOf(":");
-        int index11 = category.indexOf("#");
-        int index12 = category.indexOf("№");
-        int index13 = category.indexOf("@");
-        int index14 = category.indexOf("~");
-        int index15 = category.indexOf("*");
-        int index16 = category.indexOf("%");
-        int index17 = category.indexOf(")");
-        int index18 = category.indexOf("(");
-        int index19 = category.indexOf("|");
-        int index20 = category.indexOf("+");
-        int index21 = category.indexOf("=");
-        int index22 = category.indexOf("{");
-        int index23 = category.indexOf("}");
+    private static boolean checkBannedSymbols(String category) {
+        int index = category.indexOf(".") + category.indexOf("?") + category.indexOf("!") + category.indexOf('"') + category.indexOf("'")
+                + category.indexOf(",") + category.indexOf("&") + category.indexOf("$") + category.indexOf(";") + category.indexOf(":")
+                + category.indexOf("#") + category.indexOf("№") + category.indexOf("@") + category.indexOf("~") + category.indexOf("*")
+                + category.indexOf("%") + category.indexOf(")") + category.indexOf("(") + category.indexOf("|") + category.indexOf("+")
+                + category.indexOf("=") + category.indexOf("{") + category.indexOf("}");
 
-        if ((index1 == -1) && (index2 == -1) && (index3 == -1) && (index4 == -1) && (index5 == -1) && (index6 == -1) && (index7 == -1) && (index8 == -1) && (index9 == -1) && (index10 == -1) && (index11 == -1) && (index12 == -1) && (index13 == -1) && (index14 == -1) && (index15 == -1) && (index16 == -1) && (index17 == -1) && (index18 == -1) && (index19 == -1) && (index20 == -1) && (index21 == -1) && (index22 == -1) && (index23 == -1)) {
+        if (index < 0) {
             return true;
         } else {
             return false;
