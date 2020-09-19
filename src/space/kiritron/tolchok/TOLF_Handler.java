@@ -3,7 +3,7 @@ package space.kiritron.tolchok;
 /**
  * Класс с методами для управления конфигами стандарта КС Толчок, далее TOLF.
  * @author Киритрон Стэйблкор
- * @version 2.2
+ * @version 2.3
  */
 
 public class TOLF_Handler {
