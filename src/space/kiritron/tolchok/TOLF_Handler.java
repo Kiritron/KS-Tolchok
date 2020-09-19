@@ -89,23 +89,27 @@ public class TOLF_Handler {
         if(checkBannedSymbols(category)) {
             if (data.contains("[" + category + "]") == true) {
                 if (data.contains("[/" + category + "]") == true) {
-                    CatOp = "[" + category + "]";
-                    CatCl = "[/" + category + "]";
-                    CacheOne = data.format("\\%s[^)]+\\%s", "</", CatOp);
-                    CacheTwo = data.format("\\%s[^)]+\\%s", CatCl, "/>");
+                    if (data.contains("- " + field + ":")) {
+                        CatOp = "[" + category + "]";
+                        CatCl = "[/" + category + "]";
+                        CacheOne = data.format("\\%s[^)]+\\%s", "</", CatOp);
+                        CacheTwo = data.format("\\%s[^)]+\\%s", CatCl, "/>");
 
-                    CacheOne = CacheOne.substring(9);
-                    CacheTwo = CacheTwo.substring(1, CacheTwo.length() - (CacheTwo.length() - 1 - CatCl.length()));
+                        CacheOne = CacheOne.substring(9);
+                        CacheTwo = CacheTwo.substring(1, CacheTwo.length() - (CacheTwo.length() - 1 - CatCl.length()));
 
-                    data = data.replaceAll(String.format("\\%s[^)]+\\%s", "</", CatOp), "");
-                    data = data.replaceAll(String.format("\\%s[^)]+\\%s", CatCl, "/>"), "");
-                    int Field1 = data.indexOf("- " + field + ": ") + 4 + lenghtOfField;
-                    int Field2 = data.indexOf(";", Field1);
-                    String ParamOfFIELD = data.substring(Field1, Field2);
+                        data = data.replaceAll(String.format("\\%s[^)]+\\%s", "</", CatOp), "");
+                        data = data.replaceAll(String.format("\\%s[^)]+\\%s", CatCl, "/>"), "");
+                        final int Field = data.indexOf("- " + field + ": ") + 4 + lenghtOfField;
+                        String ParamOfFIELD = data.substring(Field, data.indexOf(";", Field));
 
-                    data = data.replaceAll("- " + field + ": " + ParamOfFIELD + ";", "- " + field + ": " + newParam + ";");
+                        data = data.replaceAll("- " + field + ": " + ParamOfFIELD + ";", "- " + field + ": " + newParam + ";");
+                        final String DataFromFilter = data.substring(0, data.length() - 2); // Костыль
 
-                    return "</" + "\n"  + "\t" + CacheOne + data + CacheTwo + "\n"  + "/>";
+                        return "</" + "\n"  + "\t" + CacheOne + DataFromFilter + "\t" + CacheTwo + "\n"  + "/>";
+                    } else {
+                        return "SEARCH_FIELD_FAILED";
+                    }
                 } else {
                     return "SEARCH_CATEGORY_FAILED";
                 }
