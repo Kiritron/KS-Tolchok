@@ -484,7 +484,13 @@ public class TOLF_Handler {
                                 data = data.replace("- " + field + ": " + ValueOfFIELD + ";", "- " + field + ": " + newValue + ";");
                                 String DataFromFilter = data.substring(2, data.length() - 2); // Костыль
 
-                                return CacheOne + DataFromFilter + CacheTwo;
+                                // Костыль. Исправляет странный баг на Linux системе, который портит данные.
+                                // У меня нету Mac, но я думаю, что этот баг там тоже присутствует.
+                                if (System.getProperty("os.name").toLowerCase().contains("windows")) {
+                                    return CacheOne + DataFromFilter + CacheTwo;
+                                } else {
+                                    return CacheOne + "\n" + DataFromFilter + "\n" + CacheTwo;
+                                }
                             } else {
                                 throw new IOException("Не удалось найти поле, параметр которого необходимо изменить.");
                             }
